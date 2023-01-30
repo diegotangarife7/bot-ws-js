@@ -1,6 +1,6 @@
 const Mensaje = require('../models/messages');
 
-export const saveMessage = async (from,number,categoria,busqueda) =>{
+const saveMessage = async (from,number,categoria,busqueda) =>{
     let newMessage
     try {
         if(categoria){
@@ -29,7 +29,7 @@ export const saveMessage = async (from,number,categoria,busqueda) =>{
     }
 }
 
-export const deleteAllMessages = async (from) =>{
+const deleteAllMessages = async (from) =>{
     try {
         await Mensaje.deleteMany({from: from})
         return true;
@@ -37,4 +37,9 @@ export const deleteAllMessages = async (from) =>{
         console.log(error);
         return false;
     }
+}
+
+module.exports = {
+    saveMessage,
+    deleteAllMessages
 }

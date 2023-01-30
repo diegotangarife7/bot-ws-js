@@ -1,21 +1,18 @@
 const fs = require('fs');   
-const {Client} = require('whatsapp-web.js');
+const {Client, NoAuth} = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const SESSION_WHATSAPP = "./session.json";
 const Mensaje = require('./models/messages');
 const Comerciantes = require('./models/comerciantes');
 const Categoria = require('./models/categoria');
-const ora = require('ora');
-const chalk = require('chalk');
 const { saveMessage, deleteAllMessages } = require('./controllers/methodsBD');
 let client;
 let sessionData;
 
 
 const withSession = () =>{
-    const spinner = ora(`cargando ${chalk.yellow("validando sesion con whatsapp ...")}`)
+    console.log("validando sesion con whatsapp ...");
     sessionData = require(SESSION_WHATSAPP);
-    spinner.start();
 
     client = new Client({
         session: sessionData
@@ -23,7 +20,6 @@ const withSession = () =>{
 
     client.on("ready", () =>{
         console.log("cliente esta listo");
-        spinner.stop();
         listMessage();
     });
 
@@ -73,7 +69,7 @@ const listMessage = () => {
             case "si":
                 const messageCategoria = await Mensaje.find({from,numberMessage:2}); 
                 const messageBusqueda = await Mensaje.find({from,numberMessage:3}); 
-                const comerciantes = await Comerciantes.find({categoria:messageCategoria.categoria}); 
+                const comerciantes = await Comerciantes.find({categoria:messageCategoria[0].categoria}); 
                 resultDelete = deleteAllMessages(from);
                 if(resultDelete){
                     comerciantes.forEach(function(objeto) {
@@ -104,21 +100,33 @@ const sendMessage = (to, msg) => {
 }
 
 const withOutSession = () =>{
-
-    client = new Client();
+    console.log("entro");
+    
+    const client = new Client({
+        authStrategy: new NoAuth()
+    });
     client.on("qr",qr => {
         qrcode.generate(qr,{small:true});
     });
 
+    client.on('ready', () => {
+        console.log('Client is ready!');
+    });
+
     client.on("authenticated", (session) => {
-        sessionData = session;
-        fs.writeFile(SESSION_WHATSAPP, JSON.stringify(session),function (err) {
-        if(err){
-            console.error(err);
+            console.log(session)
+            sessionData = session;
+            fs.writeFile(SESSION_WHATSAPP, JSON.stringify(session),function (err) {
+                if(err){
+                    console.error(err);
+                }
+            });
         }
-        });
-        }
-        );
+    );
+
+  
+
+    client.initialize();
     
 }
 
