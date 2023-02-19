@@ -125,10 +125,14 @@ const listMessage = (client) => {
           resultDelete = deleteAllMessages(from);
           if (resultDelete) {
             comerciantes.forEach(function (objeto) {
+              const indiceArroba = from.indexOf("@");
+              const numeroSinPrefijo = from
+                .replace("57", "")
+                .substring(0, indiceArroba);
               sendMessage(
                 client,
                 objeto.number,
-                `el numero ${from} esta solicitando ${messageBusqueda.busqueda}`
+                `el numero 57${numeroSinPrefijo} esta solicitando ${messageBusqueda[0].busqueda} te comparto link directo para hablar con el: https://api.whatsapp.com/send?phone=57${numeroSinPrefijo}`
               );
             });
             sendMessage(
