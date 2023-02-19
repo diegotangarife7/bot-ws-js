@@ -77,7 +77,7 @@ const listMessage = (client) => {
             ? sendMessage(
                 client,
                 from,
-                "Ingresa tu busqueda relacionado con esta categoria"
+                `Escribe el nombre del producto relacionado con la categoria que acabaste de seleccionar: ${body.toLowerCase()}`
               )
             : sendMessage(
                 client,
@@ -132,7 +132,7 @@ const listMessage = (client) => {
               sendMessage(
                 client,
                 objeto.number,
-                `el numero 57${numeroSinPrefijo} esta solicitando ${messageBusqueda[0].busqueda} te comparto link directo para hablar con el: https://api.whatsapp.com/send?phone=57${numeroSinPrefijo}`
+                `el numero 57${numeroSinPrefijo} esta solicitando [${messageBusqueda[0].busqueda}] te comparto link directo para hablar con el: https://api.whatsapp.com/send?phone=57${numeroSinPrefijo}`
               );
             });
             sendMessage(
@@ -151,12 +151,18 @@ const listMessage = (client) => {
         case "no":
           resultDelete = deleteAllMessages(from);
           if (resultDelete) {
+            const categoriasDisponibles = await Categoria.find();
             saveMessage(from, 1);
             sendMessage(
               client,
               from,
               "buen dia, por favor selecciona una de las siguientes opciones"
             );
+            setTimeout(() => {
+              categoriasDisponibles.forEach(function (objeto) {
+                sendMessage(client, from, objeto.categoria);
+              });
+            }, 4000);
           }
           break;
         default:
