@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
-mongoose.connect(process.env.MONGODB_CNN, {
+mongoose.connect('mongodb+srv://AdminAll:Aa6NJXGM3TEmSugF@cluster0.b08dm.mongodb.net/db_bot-ws?authMechanism=DEFAULT', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });

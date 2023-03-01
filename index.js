@@ -118,6 +118,7 @@ const listMessage = (client) => {
             from,
             numberMessage: 3,
           });
+          console.log(messageBusqueda)
           console.log(messageBusqueda, messageCategoria);
           const comerciantes = await Comerciantes.find({
             categoria: messageCategoria[0].categoria,
