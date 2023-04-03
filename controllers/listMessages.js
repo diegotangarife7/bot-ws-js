@@ -28,7 +28,7 @@ const listMessage = (client) => {
         sendMessage(
           client,
           from,
-          "buen dia, por favor escribe una de las siguientes opciones"
+          "¡Hola, espero que estés bien!, A continuación te proporcionaré una lista de categorías, por favor escribe la categoría a la que pertenece tu producto."
         );
         setTimeout(() => {
           categoriasDisponibles.forEach(function (objeto) {
@@ -38,6 +38,7 @@ const listMessage = (client) => {
         return;
       }
       if (messagesTwo.length === 0) {
+        console.log(categorias,body)
         if (categorias.includes(body.toLowerCase())) {
           resultSave = saveMessage(
             from,
@@ -53,13 +54,13 @@ const listMessage = (client) => {
             : sendMessage(
                 client,
                 from,
-                "ocurrio un problema al guardar la opcion, por favor vuelve a seleccionar"
+                "Ocurrió un problema al guardar la opción, por favor vuelve a seleccionar"
               );
         } else {
           sendMessage(
             client,
             from,
-            "Por favor, selecciona un campo de los anteriores mensionados"
+            "Por favor, escribe una categoría existente"
           );
         }
         return;
@@ -70,12 +71,12 @@ const listMessage = (client) => {
           ? sendMessage(
               client,
               from,
-              "estas seguro de tu busqueda?, escribe 'si' si estas seguro de la orden o 'no' si quieres repetir el proceso"
+              "Estás seguro de tu búsqueda?, escribe 'sí' si estás seguro de la orden o 'no' si quieres repetir el proceso"
             )
           : sendMessage(
               client,
               from,
-              "ocurrio un problema al guardar la busqueda, por favor vuelve a escribirla"
+              "Ocurrió un problema al guardar la búsqueda, por favor vuelve a escribirla."
             );
         return;
       }
@@ -93,7 +94,8 @@ const listMessage = (client) => {
           const comerciantes = await Comerciantes.find({
             categoria: messageCategoria[0].categoria,
           });
-          resultDelete = deleteAllMessages(from);
+          resultDelete = await deleteAllMessages(from);
+          console.log(comerciantes, resultDelete)
           if (resultDelete) {
             comerciantes.forEach(function (objeto) {
               const indiceArroba = from.indexOf("@");
@@ -103,19 +105,19 @@ const listMessage = (client) => {
               sendMessage(
                 client,
                 objeto.number,
-                `el numero 57${numeroSinPrefijo} esta solicitando [${messageBusqueda[0].busqueda}] te comparto link directo para hablar con el: https://api.whatsapp.com/send?phone=57${numeroSinPrefijo}`
+                `¡Hola! Acabamos de recibir una solicitud de [${messageBusqueda[0].busqueda}] del numero 57${numeroSinPrefijo} Te envío el enlace directo para que puedas ponerte en contacto con él y hablar sobre sus necesidades: https://api.whatsapp.com/send?phone=57${numeroSinPrefijo}`
               );
             });
             sendMessage(
               client,
               from,
-              "muchas gracias por tu solicitud, dentro de poco tiempo nuestros negocios aliados se pondran en contacto contigo"
+              "¡Gracias por tu solicitud! Pronto recibirás noticias de nuestros negocios aliados, quienes se pondrán en contacto contigo"
             );
           } else {
             sendMessage(
               client,
               from,
-              "ocurrio un error, por favor escribe de nuevo 'si' si estas seguro de la orden o 'no' si quieres repetir el proceso"
+              "Ocurrió un error, por favor escribe de nuevo 'sí' si estás seguro de la orden o 'no' si quieres repetir el proceso"
             );
           }
           break;
@@ -127,7 +129,7 @@ const listMessage = (client) => {
             sendMessage(
               client,
               from,
-              "buen dia, por favor selecciona una de las siguientes opciones"
+              "Por favor escribe la categoría a la que pertenece tu producto."
             );
             setTimeout(() => {
               categoriasDisponibles.forEach(function (objeto) {
@@ -140,7 +142,7 @@ const listMessage = (client) => {
           sendMessage(
             client,
             from,
-            "esta opcion no existe, por favor escribe 'si' si estas seguro de la orden o 'no' si quieres repetir el proceso"
+            "Esta opción no existe, por favor escribe 'sí' si estás seguro de la orden o 'no' si quieres repetir el proceso"
           );
           break;
       }
